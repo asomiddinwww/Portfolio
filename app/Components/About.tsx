@@ -329,16 +329,28 @@ function MenuIcon({ open }: { open: boolean }) {
 }
 
 const skillsCopy =
-  "I can design the site based on your needs and suggestions. I can also design the site from scratch and consult you during the job.";
+  "I design modern, responsive, and user-friendly interfaces tailored to your business needs. Every design focuses on usability, performance, and a clean visual experience.";
 
 const skillsList = [
-  { title: "DESIGN", Icon: DesignIcon, copy: skillsCopy },
-  { title: "DEVELOPMENT", Icon: DevelopmentIcon, copy: skillsCopy },
-  { title: "MAINTENANCE", Icon: MaintenanceIcon, copy: skillsCopy },
+  {
+    title: "DESIGN",
+    Icon: DesignIcon,
+    copy: "I design modern, responsive, and user-friendly interfaces tailored to your business needs. Every design focuses on usability, performance, and a clean visual experience.",
+  },
+  {
+    title: "DEVELOPMENT",
+    Icon: DevelopmentIcon,
+    copy: "I provide ongoing website maintenance to keep your site secure, fast, and up to date. This includes bug fixes, performance optimization, content updates, and technical support whenever needed.",
+  },
+  {
+    title: "MAINTENANCE",
+    Icon: MaintenanceIcon,
+    copy: "I build high-quality websites and web applications tailored to your needs. Every project is developed with clean, maintainable code, optimized performance, responsive design, and a seamless user experience across all devices.",
+  },
 ];
 
 const aboutParagraph =
-  "Nulla in velit a metus rhoncus tempus. Nulla congue nulla vel sem varius finibus. Sed ornare sit amet lorem sed viverra. In vel urna quis libero viverra facilisis ut ac est.";
+  "I'm a dedicated web developer with a passion for creating fast, responsive, and user-friendly websites. I focus on writing clean, maintainable code and delivering high-quality solutions that exceed client expectations.";
 
 const readMoreExtra =
   " Morbi commodo, eros in dignissim tempus, lacus odio rutrum augue, in semper sem magna quis tellus. Etiam enim erat, suscipit eu semper a, dictum sit amet elit. Nunc egestas nisi eget enim gravida facilisis. Pellentesque laoreet varius turpis vel pharetra. Ut ante justo, consequat vitae elementum tempor, accumsan nec eros.";

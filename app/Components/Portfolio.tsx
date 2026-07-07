@@ -86,7 +86,7 @@ export default function Portfolio() {
     active === "ALL" ? projects : projects.filter((p) => p.category === active);
 
   return (
-    <section className="w-full bg-neutral-900">
+    <section className="w-full bg-neutral-900" id="portfolio">
       <div className="relative flex h-64 w-full items-center justify-center overflow-hidden sm:h-72">
         <div
           className="absolute inset-0 bg-cover bg-center"
@@ -146,15 +146,12 @@ export default function Portfolio() {
               {/* Base dim */}
               <div className="absolute inset-0 bg-black/30 transition-opacity duration-500 group-hover:bg-black/10" />
 
-              {/* Bottom gradient that rises on hover */}
               <div className="absolute inset-x-0 bottom-0 h-2/3 translate-y-full bg-gradient-to-t from-black/90 via-black/50 to-transparent transition-transform duration-500 ease-out group-hover:translate-y-0" />
 
-              {/* Category badge, always visible top-left */}
               <span className="absolute left-3 top-3 z-10 text-[10px] font-semibold tracking-[0.2em] text-white/80 opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 -translate-y-1">
                 {project.category}
               </span>
 
-              {/* Corner arrow, signals "clickable" */}
               <span className="absolute right-3 top-3 z-10 flex h-8 w-8 -translate-y-2 rotate-45 items-center justify-center rounded-full border border-white/40 text-white opacity-0 transition-all duration-500 ease-out group-hover:translate-y-0 group-hover:rotate-0 group-hover:opacity-100">
                 <svg
                   viewBox="0 0 24 24"

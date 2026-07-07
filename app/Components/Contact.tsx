@@ -1,10 +1,29 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Mail, ChevronUp } from "lucide-react";
 import { BsInstagram } from "react-icons/bs";
 import { FaFacebook, FaLinkedin } from "react-icons/fa";
 
 const initialForm = { name: "", email: "", phone: "", message: "" };
+
+const socialLinks = [
+  {
+    Icon: FaFacebook,
+    label: "Facebook",
+    href: "https://www.facebook.com/profile.php?id=61586031346181",
+  },
+  {
+    Icon: FaLinkedin,
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/asomiddin-to-raxonovv-5ba3993ba/",
+  },
+  {
+    Icon: BsInstagram,
+    label: "Instagram",
+    href: "https://www.instagram.com/turakhano.v/",
+  },
+  { Icon: Mail, label: "Email", href: "mailto:asomiddinto@gmail.com" },
+];
 
 export default function Contact() {
   const [form, setForm] = useState(initialForm);
@@ -15,7 +34,6 @@ export default function Contact() {
   }>({});
   const [focused, setFocused] = useState<string | null>(null);
   const [status, setStatus] = useState("idle"); // idle | sending | sent
-  const [isHovered, setIsHovered] = useState(false);
 
   const triggerCursor = (hovering: boolean) => {
     if (typeof window !== "undefined") {
@@ -79,7 +97,6 @@ export default function Contact() {
         fontFamily: "'Helvetica Neue', Arial, sans-serif",
       }}
     >
-      {/* CSS Animatsiyalar va Effektlar */}
       <style jsx global>{`
         @keyframes fadeUp {
           from {
@@ -135,6 +152,17 @@ export default function Contact() {
         .submit-btn:active:not(:disabled) {
           transform: translateY(0px) scale(0.97);
         }
+        .submit-btn:disabled {
+          opacity: 0.55;
+        }
+        .submit-btn:focus-visible,
+        .back-top:focus-visible,
+        .social-icon:focus-visible,
+        .contact-input:focus-visible,
+        .contact-textarea:focus-visible {
+          outline: 2px solid #111;
+          outline-offset: 3px;
+        }
         .social-icon {
           transition:
             transform 0.25s ease,
@@ -162,6 +190,31 @@ export default function Contact() {
         .contact-input,
         .contact-textarea {
           transition: border-color 0.2s ease;
+        }
+        .visually-hidden {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+          border: 0;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .fade-up,
+          .field-underline,
+          [style*="animation"] {
+            animation: none !important;
+          }
+          .submit-btn,
+          .social-icon,
+          .back-top,
+          .contact-input,
+          .contact-textarea {
+            transition: none !important;
+          }
         }
       `}</style>
 
@@ -236,6 +289,7 @@ export default function Contact() {
         <form
           onSubmit={handleSubmit}
           className="fade-up"
+          noValidate
           style={{
             animationDelay: "0.3s",
             width: "100%",
@@ -245,69 +299,81 @@ export default function Contact() {
             gap: "34px",
           }}
         >
-          {fields.map((f) => (
-            <div key={f.name} style={{ position: "relative" }}>
-              <div
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  top: 0,
-                  bottom: 0,
-                  width: "2px",
-                  background: "#111",
-                }}
-              />
-              <input
-                className="contact-input"
-                type={f.type}
-                name={f.name}
-                value={form[f.name as keyof typeof form]}
-                onChange={handleChange}
-                onFocus={() => setFocused(f.name)}
-                onBlur={() => setFocused(null)}
-                onMouseEnter={() => triggerCursor(true)}
-                onMouseLeave={() => triggerCursor(false)}
-                placeholder={f.placeholder}
-                style={{
-                  width: "100%",
-                  boxSizing: "border-box",
-                  border: "none",
-                  outline: "none",
-                  background: "transparent",
-                  padding: "10px 0 10px 18px",
-                  fontSize: "12px",
-                  letterSpacing: "1px",
-                  color: "#333",
-                  borderBottom: `2px solid ${
-                    errors[f.name as keyof typeof errors] ? "#c0392b" : "#111"
-                  }`,
-                }}
-              />
-              {focused === f.name && (
+          {fields.map((f) => {
+            const fieldError = errors[f.name as keyof typeof errors];
+            const errorId = `${f.name}-error`;
+            return (
+              <div key={f.name} style={{ position: "relative" }}>
                 <div
-                  key={f.name + "-underline"}
-                  className="field-underline"
                   style={{
-                    background: errors[f.name as keyof typeof errors]
-                      ? "#c0392b"
-                      : "#111",
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: "2px",
+                    background: "#111",
                   }}
                 />
-              )}
-              {errors[f.name as keyof typeof errors] && (
-                <div
+                <label htmlFor={f.name} className="visually-hidden">
+                  {f.placeholder}
+                </label>
+                <input
+                  id={f.name}
+                  className="contact-input"
+                  type={f.type}
+                  name={f.name}
+                  autoComplete={
+                    f.name === "email"
+                      ? "email"
+                      : f.name === "phone"
+                        ? "tel"
+                        : "name"
+                  }
+                  value={form[f.name as keyof typeof form]}
+                  onChange={handleChange}
+                  onFocus={() => setFocused(f.name)}
+                  onBlur={() => setFocused(null)}
+                  onMouseEnter={() => triggerCursor(true)}
+                  onMouseLeave={() => triggerCursor(false)}
+                  placeholder={f.placeholder}
+                  aria-invalid={!!fieldError}
+                  aria-describedby={fieldError ? errorId : undefined}
                   style={{
-                    color: "#c0392b",
-                    fontSize: "11px",
-                    marginTop: "6px",
-                    paddingLeft: "18px",
+                    width: "100%",
+                    boxSizing: "border-box",
+                    border: "none",
+                    outline: "none",
+                    background: "transparent",
+                    padding: "10px 0 10px 18px",
+                    fontSize: "12px",
+                    letterSpacing: "1px",
+                    color: "#333",
+                    borderBottom: `2px solid ${fieldError ? "#c0392b" : "#111"}`,
                   }}
-                >
-                  {errors[f.name as keyof typeof errors]}
-                </div>
-              )}
-            </div>
-          ))}
+                />
+                {focused === f.name && (
+                  <div
+                    className="field-underline"
+                    style={{ background: fieldError ? "#c0392b" : "#111" }}
+                  />
+                )}
+                {fieldError && (
+                  <div
+                    id={errorId}
+                    role="alert"
+                    style={{
+                      color: "#c0392b",
+                      fontSize: "11px",
+                      marginTop: "6px",
+                      paddingLeft: "18px",
+                    }}
+                  >
+                    {fieldError}
+                  </div>
+                )}
+              </div>
+            );
+          })}
 
           {/* Message */}
           <div style={{ position: "relative" }}>
@@ -321,7 +387,11 @@ export default function Contact() {
                 background: "#111",
               }}
             />
+            <label htmlFor="message" className="visually-hidden">
+              YOUR MESSAGE
+            </label>
             <textarea
+              id="message"
               className="contact-textarea"
               name="message"
               value={form.message}
@@ -332,6 +402,8 @@ export default function Contact() {
               onMouseLeave={() => triggerCursor(false)}
               placeholder="YOUR MESSAGE*"
               rows={5}
+              aria-invalid={!!errors.message}
+              aria-describedby={errors.message ? "message-error" : undefined}
               style={{
                 width: "100%",
                 boxSizing: "border-box",
@@ -357,6 +429,8 @@ export default function Contact() {
             )}
             {errors.message && (
               <div
+                id="message-error"
+                role="alert"
                 style={{
                   color: "#c0392b",
                   fontSize: "11px",
@@ -378,6 +452,7 @@ export default function Contact() {
             }}
           >
             <button
+              id="contact"
               type="submit"
               disabled={status === "sending"}
               className="submit-btn"
@@ -414,6 +489,7 @@ export default function Contact() {
 
           {status === "sent" && (
             <p
+              role="status"
               style={{
                 textAlign: "center",
                 color: "#2e7d32",
@@ -471,10 +547,15 @@ export default function Contact() {
             marginBottom: "26px",
           }}
         >
-          {[FaFacebook, FaLinkedin, BsInstagram, Mail].map((Icon, i) => (
+          {socialLinks.map(({ Icon, label, href }) => (
             <a
-              key={i}
-              href="#"
+              key={label}
+              href={href}
+              aria-label={label}
+              target={href.startsWith("mailto:") ? undefined : "_blank"}
+              rel={
+                href.startsWith("mailto:") ? undefined : "noopener noreferrer"
+              }
               className="social-icon"
               onMouseEnter={() => triggerCursor(true)}
               onMouseLeave={() => triggerCursor(false)}
@@ -495,8 +576,8 @@ export default function Contact() {
         </div>
 
         <p style={{ fontSize: "12px", color: "#bbb", margin: 0 }}>
-          @2020 <strong style={{ color: "#fff" }}>Tomasz Gajda</strong> All
-          Rights Reserved.
+          @2026 <strong style={{ color: "#fff" }}>Asomiddin Turakhanov</strong>{" "}
+          All Rights Reserved.
         </p>
       </footer>
     </div>

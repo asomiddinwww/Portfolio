@@ -1,7 +1,11 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
-const navLinks = ["About me", "Skills", "Portfolio"];
+const navLinks = [
+  { name: "About me", id: "about" },
+  { name: "Skills", id: "skillss" },
+  { name: "Portfolio", id: "portfolio" },
+];
 
 function Logo() {
   return (
@@ -82,7 +86,6 @@ function LinkedinIcon() {
 }
 
 export default function Navbar() {
-  // 1. TYPING EFFECT LOGIKASI
   const words = ["Front-end Developer", "UI/UX Designer", "Back-end Developer"];
   const [currentWordIdx, setCurrentWordIdx] = useState(0);
   const [currentText, setCurrentText] = useState("");
@@ -115,7 +118,6 @@ export default function Navbar() {
     return () => clearTimeout(timer);
   }, [currentText, isDeleting, currentWordIdx]);
 
-  // 2. MOUSE EFFECT (CUSTOM CURSOR) LOGIKASI
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
 
@@ -123,93 +125,116 @@ export default function Navbar() {
     const handleMouseMove = (e: MouseEvent) => {
       setMousePos({ x: e.clientX, y: e.clientY });
     };
-
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  // Hover funksiyalari (kod ixcham bo'lishi uchun)
   const enterpriseHover = {
     onMouseEnter: () => setIsHovered(true),
     onMouseLeave: () => setIsHovered(false),
   };
 
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const [selectedProject, setSelectedProject] = useState<any>(null);
+
+  const projects = [
+    {
+      id: 1,
+      title: "E-Commerce App",
+      category: "Full-stack Development",
+      desc: "Zamonaviy onlayn do'kon platformasi. To'liq funksional savat, to'lov tizimlari va admin paneli mavjud.",
+      tech: ["Next.js", "TailwindCSS", "Node.js", "MongoDB"],
+      imageBg: "bg-gradient-to-br from-blue-600 to-indigo-900",
+    },
+    {
+      id: 2,
+      title: "Crypto Dashboard",
+      category: "UI/UX & Front-end",
+      desc: "Kriptovalyuta kurslarini real vaqt rejimida kuzatib boruvchi chiroyli va qulay tahliliy boshqaruv paneli.",
+      tech: ["React", "Chart.js", "TailwindCSS", "Websockets"],
+      imageBg: "bg-gradient-to-br from-purple-600 to-slate-900",
+    },
+    {
+      id: 3,
+      title: "SaaS Landing Page",
+      category: "UI/UX Optimization",
+      desc: "Konversiya darajasi yuqori bo'lgan, barcha qurilmalarga moslashuvchan (responsive) mukammal landing sahifa.",
+      tech: ["Figma", "Next.js", "Framer Motion"],
+      imageBg: "bg-gradient-to-br from-emerald-500 to-teal-900",
+    },
+  ];
+
   return (
-    <main className="flex-1 bg-[#e4e4e4] overflow-hidden relative">
-      {/* SICHQONCHA EFFEKTI (Custom Cursor) - Faqat kompyuterda chiqadi */}
+    <main className="flex-1 bg-[#e4e4e4] overflow-hidden relative font-sans selection:bg-blue-600 selection:text-white">
       <div
         className="hidden md:block pointer-events-none fixed top-0 left-0 w-8 h-8 rounded-full border-2 border-neutral-900 -translate-x-1/2 -translate-y-1/2 z-50 transition-transform duration-150 ease-out"
         style={{
           left: `${mousePos.x}px`,
           top: `${mousePos.y}px`,
           transform: `translate(-50%, -50%) scale(${isHovered ? 2 : 1})`,
-          backgroundColor: isHovered ? "rgba(0, 0, 0, 0.05)" : "transparent",
+          backgroundColor: isHovered ? "rgba(37, 99, 235, 0.1)" : "transparent",
           borderColor: isHovered ? "#2563eb" : "#171717",
         }}
       />
       <div
         className="hidden md:block pointer-events-none fixed top-0 left-0 w-2 h-2 rounded-full bg-blue-600 -translate-x-1/2 -translate-y-1/2 z-50"
-        style={{
-          left: `${mousePos.x}px`,
-          top: `${mousePos.y}px`,
-        }}
+        style={{ left: `${mousePos.x}px`, top: `${mousePos.y}px` }}
       />
 
       <section className="relative overflow-hidden min-h-[750px] md:h-[650px]">
-        {/* Orqa fondagi qora blok */}
         <div
           className="absolute inset-y-0 right-0 w-full bg-[#0a0a0a]"
           style={{
             clipPath: "polygon(49% 0, 100% 0, 100% 100%, 39% 100%)",
-            animation: "slideInBg 1s cubic-bezier(0.16, 1, 0.3, 1) forwards",
           }}
         />
 
         <div className="relative mx-auto flex max-w-[1440px] flex-col z-10">
           {/* NAVBAR */}
-          <div className="flex items-center justify-between px-6 pt-8 sm:px-10 lg:px-14 animate-fade-in-down">
-            <div {...enterpriseHover}>
+          <div className="flex items-center justify-between px-6 pt-8 sm:px-10 lg:px-14">
+            <div
+              {...enterpriseHover}
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            >
               <Logo />
             </div>
             <nav className="hidden items-center gap-10 md:flex">
               {navLinks.map((link) => (
-                <a
-                  key={link}
-                  href="#"
+                <button
+                  key={link.id}
+                  onClick={() => scrollToSection(link.id)}
                   {...enterpriseHover}
-                  className="text-sm font-semibold tracking-wide text-white/90 transition hover:text-white hover:scale-105"
+                  className="text-sm font-semibold tracking-wide text-white/90 transition hover:text-white hover:scale-105 bg-transparent border-none cursor-pointer"
                 >
-                  {link}
-                </a>
+                  {link.name}
+                </button>
               ))}
-              <a
-                href="#"
+              <button
+                onClick={() => scrollToSection("contact")}
                 {...enterpriseHover}
                 className="rounded-full bg-white px-6 py-3 text-xs font-bold tracking-wide text-black transition hover:bg-black hover:text-white hover:ring-2 hover:ring-white"
               >
                 CONTACT ME
-              </a>
+              </button>
             </nav>
           </div>
 
-          {/* MAIN CONTENT */}
+          {/* MAIN HERO CONTENT */}
           <div className="grid grid-cols-1 items-center md:grid-cols-2 mt-16 md:mt-24">
-            {/* TEXT QISMI */}
             <div className="px-6 pb-12 sm:px-10 lg:px-14">
-              <p
-                className="text-xl font-medium text-neutral-900 sm:text-2xl animate-fade-in-up"
-                style={{ animationDelay: "200ms" }}
-              >
+              <p className="text-xl font-medium text-neutral-900 sm:text-2xl">
                 Hi, I am
               </p>
-              <h1
-                className="mt-2 text-5xl font-extrabold leading-[1.05] tracking-tight text-neutral-900 sm:text-6xl lg:text-[3.5rem] animate-fade-in-up"
-                style={{ animationDelay: "400ms" }}
-              >
+              <h1 className="mt-2 text-5xl font-extrabold leading-[1.05] tracking-tight text-neutral-900 sm:text-6xl lg:text-[3.5rem]">
                 Asomiddin Turakhanov
               </h1>
 
-              {/* DINAMIK YOZILADIGAN QISM */}
               <p className="mt-3 text-lg font-bold text-neutral-500 sm:text-xl min-h-[28px] flex items-center">
                 <span className="text-neutral-900 bg-neutral-300/50 px-2 py-0.5 rounded">
                   {currentText}
@@ -219,27 +244,25 @@ export default function Navbar() {
                 </span>
               </p>
 
-              {/* SOCIAL ICONS */}
-              <div
-                className="mt-10 flex items-center gap-4 animate-fade-in-up"
-                style={{ animationDelay: "800ms" }}
-              >
+              <div className="mt-10 flex items-center gap-4">
                 <a
-                  href="#"
+                  href="mailto:asomiddinto@gmail.com"
                   {...enterpriseHover}
                   className="flex h-14 w-14 items-center justify-center rounded-md bg-neutral-800 transition hover:bg-neutral-700 hover:-translate-y-1"
                 >
                   <AtIcon />
                 </a>
                 <a
-                  href="#"
+                  href="https://github.com/asomiddinwww"
+                  target="_blank"
                   {...enterpriseHover}
                   className="flex h-14 w-14 items-center justify-center rounded-md bg-neutral-800 transition hover:bg-[#24292e] hover:-translate-y-1"
                 >
                   <GithubIcon />
                 </a>
                 <a
-                  href="#"
+                  href="https://www.linkedin.com/in/asomiddin-to-raxonovv-5ba3993ba/"
+                  target="_blank"
                   {...enterpriseHover}
                   className="flex h-14 w-14 items-center justify-center rounded-md bg-neutral-800 transition hover:bg-[#0077b5] hover:-translate-y-1"
                 >
@@ -247,14 +270,14 @@ export default function Navbar() {
                 </a>
               </div>
             </div>
-
-            <div className="relative flex justify-center md:justify-start"></div>
           </div>
         </div>
       </section>
 
-      {/* IT BERRIES SECTION */}
-      <section className="relative overflow-hidden bg-[#181818] py-20 group">
+      <section
+        id="about"
+        className="relative overflow-hidden bg-[#181818] py-24 group"
+      >
         <span
           aria-hidden
           className="pointer-events-none absolute -right-6 -top-10 select-none text-[220px] font-black leading-none text-white/[0.04] sm:text-[320px] transition-transform duration-700 ease-out group-hover:scale-110 will-change-transform"
@@ -263,26 +286,26 @@ export default function Navbar() {
         </span>
 
         <div className="relative mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-14 z-10">
-          <h2 className="text-2xl font-extrabold tracking-[0.15em] text-white">
-            IT BERRIES
+          <h2 className="text-2xl font-extrabold tracking-[0.15em] text-white uppercase">
+            About Me / IT Berries
           </h2>
           <p className="mt-6 max-w-3xl text-sm leading-relaxed text-neutral-400">
-            Nulla in velit a metus rhoncus tempus. Nulla congue nulla vel sem
-            varius finibus. Sed ornare sit amet lorem sed viverra. In vel urna
-            quis libero viverra facilisis ut ac est. Morbi commodo, eros in
-            dignissim tempus, lacus odio rutrum augue, in semper sem magna quis
-            tellus. Etiam enim erat, suscipit eu semper a, dictum sit amet elit.
-            Nunc egestas nisi eget enim gravida facilisis. Pellentesque laoreet
-            varius turpis vel pharetra. Ut ante justo, consequat vitae elementum
-            tempor, accumsan nec eros.
+            Salom! Mening ismim Asomiddin. Men zamonaviy va yuqori yuklamalarga
+            chidamli veb-ilovalarni yaratish bilan shug'ullanaman. UI/UX
+            dizayndan tortib, mukammal backend tizimlarigacha bo'lgan
+            jarayonlarni boshqara olaman. Har bir loyihaga dizayn va kod
+            uyg'unligi nuqtai nazaridan yondashaman. Quyida mening asosiy
+            texnologik ko'nikmalarim va oxirgi loyihalarim bilan tanishishingiz
+            mumkin.
           </p>
 
           <button
+            onClick={() => scrollToSection("portfolio")}
             {...enterpriseHover}
-            className="mt-8 flex items-center gap-4 text-xs font-bold tracking-[0.2em] text-white group/btn"
+            className="mt-8 flex items-center gap-4 text-xs font-bold tracking-[0.2em] text-white group/btn bg-transparent border-none cursor-pointer"
           >
             <span className="transition-all duration-300 group-hover/btn:tracking-[0.3em]">
-              READ MORE
+              VIEW PORTFOLIO
             </span>
             <span className="h-6 w-px bg-white/40 transition-all duration-300 group-hover/btn:bg-white group-hover/btn:scale-y-125" />
           </button>

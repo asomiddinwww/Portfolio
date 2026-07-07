@@ -10,11 +10,10 @@ import {
   SiGit,
   SiFigma,
   SiNodedotjs,
-  SiMysql,
-  SiMongodb,
   SiTypescript,
+  SiNextdotjs,
+  SiCss,
   SiCplusplus,
-  SiC,
 } from "react-icons/si";
 import type { IconType } from "react-icons";
 
@@ -28,7 +27,7 @@ type SkillItem = {
 
 const usingNow: SkillItem[] = [
   { label: "HTML5", color: "#E34F26", Icon: SiHtml5 },
-  { label: "CSS3", color: "#1572B6" },
+  { label: "CSS", color: "#1572B6", Icon: SiCss },
   { label: "Sass", color: "#CC6699", Icon: SiSass },
   { label: "JavaScript", color: "#F7DF1E", Icon: SiJavascript },
   { label: "React", color: "#61DAFB", Icon: SiReact },
@@ -39,14 +38,13 @@ const usingNow: SkillItem[] = [
 
 const learning: SkillItem[] = [
   { label: "NodeJS", color: "#5FA04E", Icon: SiNodedotjs },
-  { label: "MySQL", color: "#4479A1", Icon: SiMysql },
-  { label: "MongoDB", color: "#47A248", Icon: SiMongodb },
+  { label: "Next", color: "#61DAFB", Icon: SiNextdotjs },
   { label: "TypeScript", color: "#3178C6", Icon: SiTypescript },
 ];
 
 const otherSkills: SkillItem[] = [
   { label: "Angielski", sublabel: "C1/C2", color: "#00247D", emoji: "🇬🇧" },
-  { label: "Russki", sublabel: "B1/B2", color: "#AA151B", emoji: "🇪🇸" },
+  { label: "Russki", sublabel: "B1/B2", color: "#AA151B", emoji: "🇷🇺" },
   { label: "C++", color: "#00599C", Icon: SiCplusplus },
 ];
 
@@ -117,7 +115,7 @@ export default function Skills() {
         }
       `}</style>
 
-      <div className="mx-auto max-w-3xl">
+      <div className="mx-auto max-w-3xl" id="skillss">
         <div className="mb-16 flex justify-center opacity-0 animate-[fadeInUp_0.6s_ease-out_forwards]">
           <div className="border-2 border-neutral-900 px-10 py-4">
             <h2 className="text-2xl font-bold tracking-[0.35em] text-neutral-900">
